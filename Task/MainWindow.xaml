@@ -5,8 +5,43 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Task"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainView" Height="450" Width="800">
     <Grid>
-
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Button Content="btn_View_1" HorizontalAlignment="Stretch" Grid.Column="0" Margin="100,10,10,0" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" FontSize="17"/>
+        <Button Content="btn_View_2" HorizontalAlignment="Stretch" Grid.Column="1" Margin="10,10,100,0" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" FontSize="17"/>
+        <ListView Grid.Row="1" Grid.ColumnSpan="2" Margin="10,10,10,10"/>
+        <GroupBox Grid.Column="2" Margin="10,0,10,10" Header="AuthView" Grid.Row="1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>                   
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>                  
+                </Grid.RowDefinitions>
+                <Button Content="Logout" Margin="25,5,25,0" Grid.Row="0" Visibility="Hidden"/>
+                <TextBox TextWrapping="Wrap" Margin="25,5,25,0" Grid.Row="0"/>
+                <TextBox TextWrapping="Wrap" Margin="25,5,25,0" Grid.Row="1"/>
+                <Button Content="Login" Margin="25,5,25,0" Grid.Row="2" FontSize="17"/>
+                <Button Content="btn_RegView" Margin="25,5,20,0" Grid.Row="10" FontSize="17"/>
+            </Grid>
+        </GroupBox>
     </Grid>
 </Window>

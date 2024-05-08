@@ -23,6 +23,7 @@ namespace Task
         public RegistrationWindow()
         {
             InitializeComponent();
+            DataContext = LogInViewModel.logInViewModel;
         }
     }
 }

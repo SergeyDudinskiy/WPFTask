@@ -1,4 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using SwaggerPetstore.Standard.Controllers;
+using SwaggerPetstore.Standard.Exceptions;
+using SwaggerPetstore.Standard.Models;
+using System.Collections.ObjectModel;
 using System.Windows;
 
 namespace Task
@@ -24,10 +27,9 @@ namespace Task
             registrationWindow.Close();
         }
 
-        public bool EndRegistration(LogIn user, ObservableCollection<LogIn> users, ObservableCollection<LogIn> lastUser)
+        public async Task<bool> EndRegistration(LogIn user, ObservableCollection<LogIn> lastUser)
         {
-            
-            if (string.IsNullOrEmpty(user.Login) || 
+            if (string.IsNullOrEmpty(user.Login) ||
                 string.IsNullOrEmpty(user.Password) ||
                 string.IsNullOrEmpty(user.Name) ||
                 string.IsNullOrEmpty(user.Surname) ||
@@ -37,19 +39,34 @@ namespace Task
                 return false;
             }
 
-            for (int i = 0; i < users.Count; i++)
+            try
             {
-                if (user.Login == users[i].Login)
-                {
-                    return false;
-                }
+                User foundedUser = await LogInViewModel.userController.GetUserByNameAsync(user.Login);
+                return false;
             }
+            catch (ApiException e)
+            {
+                if (e.Message == "User not found")
+                {
+                    try
+                    {
+                        User u = new User(1, user.Login, user.Name, user.Surname, user.Email, user.Password, user.Phone, 1);
+                        await LogInViewModel.userController.CreateUserAsync(u);                        
+                        user.Text = user.Login;
+                        lastUser.Clear();
+                        lastUser.Add(user);
+                        return true;
+                    }
+                    catch (ApiException e1)
+                    {
+                        return false;
+                    }                    
+                }
 
-            user.Text = user.Login;
-            users.Add(user);
-            lastUser.Clear();
-            lastUser.Add(user);
-            return true;           
+                
+            }
+            
+            return false;
         }
 
         public void ShowMessage(string message)

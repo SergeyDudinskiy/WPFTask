@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using SwaggerPetstore.Standard.Models;
+using System.Windows;
 
 namespace Task
 {
@@ -11,7 +12,13 @@ namespace Task
         {
             InitializeComponent();
             LogInViewModel.logInViewModel = new LogInViewModel(new DefaultDialogService());
-            DataContext = LogInViewModel.logInViewModel;            
+            DataContext = LogInViewModel.logInViewModel;
+
+            LogInViewModel.client = new SwaggerPetstore.Standard.SwaggerPetstoreClient.Builder()
+            .OAuthScopes(new List<OAuthScopeEnum>() { OAuthScopeEnum.Readpets, OAuthScopeEnum.Writepets })
+            .Environment(SwaggerPetstore.Standard.Environment.Production).OAuthToken(new OAuthToken("special-key", tokenType: "string"))
+            .Build();
+            LogInViewModel.userController = LogInViewModel.client.UserController;
         }
     }
 }

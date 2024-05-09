@@ -6,6 +6,8 @@ using SwaggerPetstore.Standard.Controllers;
 using SwaggerPetstore.Standard.Exceptions;
 using SwaggerPetstore.Standard.Models;
 using static System.Net.WebRequestMethods;
+using System.Text.Json;
+using System.Xml.Linq;
 
 namespace Task
 {
@@ -141,9 +143,8 @@ namespace Task
             //https://www.nuget.org/packages/PetstoreSDK/0.1.1?_src=template
 
             SwaggerPetstore.Standard.SwaggerPetstoreClient client = new SwaggerPetstore.Standard.SwaggerPetstoreClient.Builder()
-    .OAuthScopes(new List<OAuthScopeEnum>() { OAuthScopeEnum.Readpets, OAuthScopeEnum.Writepets })
-    .ImplicitAuth("petstore_auth", "https://petstore.swagger.io/oauth/login.jsp") 
-    .Environment(SwaggerPetstore.Standard.Environment.Production)
+    .OAuthScopes(new List<OAuthScopeEnum>() { OAuthScopeEnum.Readpets, OAuthScopeEnum.Writepets }) 
+    .Environment(SwaggerPetstore.Standard.Environment.Production).OAuthToken(new OAuthToken("special-key", tokenType:"string"))
     .Build();
 
             long? id = 10L;
@@ -160,7 +161,7 @@ namespace Task
             try
             {
                 User u = new User(id, username, firstName, lastName, email, password, phone, userStatus);
-                await userController.CreateUserAsync(u);
+                await userController.CreateUserAsync(u);                
             }
             catch (ApiException e)
             {
@@ -168,39 +169,50 @@ namespace Task
                 MessageBox.Show(e.Message); 
             }
 
-
-
-                //if (!string.IsNullOrEmpty(_user.Login) && !string.IsNullOrEmpty(_user.Password))
-                //{
-                //    bool flagFound = false;
-
-                //    for (int i = 0; i < Users.Count; i++)
-                //    {
-                //        if (_user.Login == Users[i].Login && _user.Password == Users[i].Password)
-                //        {
-                //            _user = Users[i];
-                //            flagFound = true;
-                //            break;
-                //        }
-                //    }
-
-                //    if (flagFound)
-                //    {
-                //        _formElements.LoginVisible = Visibility.Hidden;
-                //        _formElements.LogoutVisible = Visibility.Visible;
-                //        OnPropertyChanged(nameof(LoginVisible));
-                //        OnPropertyChanged(nameof(LogoutVisible));
-                //        OnPropertyChanged(nameof(Login));
-                //        OnPropertyChanged(nameof(Password));                   
-                //    }
-                //    else
-                //    {                    
-                //        defaultDialogService.ShowMessage("Пользователь не найден!");
-                //    }
-                //}
-
-                //UserEnter();
+            try
+            {
+                User result = await userController.GetUserByNameAsync(username);
+                MessageBox.Show(result.Email);
             }
+            catch (ApiException e)
+            {
+                // TODO: Handle exception here
+                Console.WriteLine(e.Message);
+            }
+
+
+
+            //if (!string.IsNullOrEmpty(_user.Login) && !string.IsNullOrEmpty(_user.Password))
+            //{
+            //    bool flagFound = false;
+
+            //    for (int i = 0; i < Users.Count; i++)
+            //    {
+            //        if (_user.Login == Users[i].Login && _user.Password == Users[i].Password)
+            //        {
+            //            _user = Users[i];
+            //            flagFound = true;
+            //            break;
+            //        }
+            //    }
+
+            //    if (flagFound)
+            //    {
+            //        _formElements.LoginVisible = Visibility.Hidden;
+            //        _formElements.LogoutVisible = Visibility.Visible;
+            //        OnPropertyChanged(nameof(LoginVisible));
+            //        OnPropertyChanged(nameof(LogoutVisible));
+            //        OnPropertyChanged(nameof(Login));
+            //        OnPropertyChanged(nameof(Password));                   
+            //    }
+            //    else
+            //    {                    
+            //        defaultDialogService.ShowMessage("Пользователь не найден!");
+            //    }
+            //}
+
+            //UserEnter();
+        }
 
             private void UserEnter()
         {

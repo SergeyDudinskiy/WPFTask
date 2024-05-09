@@ -41,7 +41,8 @@ namespace Task
 
             try
             {
-                User foundedUser = await LogInViewModel.userController.GetUserByNameAsync(user.Login);               
+                User foundedUser = await LogInViewModel.userController.GetUserByNameAsync(user.Login);
+                return false;
             }
             catch (ApiException e)
             {
@@ -50,20 +51,19 @@ namespace Task
                     try
                     {
                         User u = new User(1, user.Login, user.Name, user.Surname, user.Email, user.Password, user.Phone, 1);
-                        await LogInViewModel.userController.CreateUserAsync(u);
+                        await LogInViewModel.userController.CreateUserAsync(u);                        
+                        user.Text = user.Login;
+                        lastUser.Clear();
+                        lastUser.Add(user);
+                        return true;
                     }
                     catch (ApiException e1)
                     {
                         return false;
-                    }
-
-                    user.Text = user.Login;
-                    lastUser.Clear();
-                    lastUser.Add(user);
-                    return true;
+                    }                    
                 }
 
-                return false;
+                
             }
             
             return false;

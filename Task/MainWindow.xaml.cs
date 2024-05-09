@@ -1,5 +1,4 @@
-﻿using SwaggerPetstore.Standard.Controllers;
-using SwaggerPetstore.Standard.Models;
+﻿using SwaggerPetstore.Standard.Models;
 using System.Windows;
 
 namespace Task

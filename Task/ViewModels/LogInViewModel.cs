@@ -137,9 +137,27 @@ namespace Task
             {
                 try
                 {
-                    string result = await userController.LoginUserAsync(_user.Login, _user.Password);
+                    string result = await userController.LoginUserAsync(_user.Login, _user.Password); //всегда возвращает {"code":200,"type":"unknown","message":"logged in user session: 
+                    //поэтому не юзаю
 
-                    if (result != "")
+                    //if (result != "")
+                    //{
+                    bool flag = false;
+                    try
+                    {
+                        User foundedUser = await LogInViewModel.userController.GetUserByNameAsync(_user.Login);
+                        _user.Text = foundedUser.Username;
+                        _user.Email = foundedUser.Email;
+                        _user.Name = foundedUser.FirstName;
+                        _user.Surname = foundedUser.LastName;
+                        _user.Phone = foundedUser.Phone;
+                    }
+                    catch (ApiException e)
+                    {
+                        flag = false;
+                    }
+
+                    if (flag)
                     {
                         _formElements.LoginVisible = Visibility.Hidden;
                         _formElements.LogoutVisible = Visibility.Visible;
@@ -148,6 +166,7 @@ namespace Task
                         OnPropertyChanged(nameof(Login));
                         OnPropertyChanged(nameof(Password));
                     }
+                    //}
                     else
                     {
                         defaultDialogService.ShowMessage("Пользователь не найден!");
@@ -156,7 +175,7 @@ namespace Task
                 catch (ApiException e)
                 {
 
-                }                
+                }
             }
 
             UserEnter();
@@ -242,22 +261,6 @@ namespace Task
                   {
                       try
                       {
-                          //bool result2 = defaultDialogService.EndRegistration(_user, lastUser);
-
-                          //Task<bool> task = new Task<bool>(() => defaultDialogService.EndRegistration(_user, lastUser));
-                          ////task.Start();
-                          //bool result = task.Result;
-
-
-                          //await defaultDialogService.EndRegistration(_user, lastUser);
-
-                          ////if (!task.IsCompleted)
-                          ////{
-                          ////    task.Wait();
-                          ////}
-
-                          //bool result = task.Result;
-
                           if (await defaultDialogService.EndRegistration(_user, lastUser))
                           {
                               defaultDialogService.ShowMessage("Регистрация завершена!");
